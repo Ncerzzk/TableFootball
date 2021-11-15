@@ -1,11 +1,21 @@
 import cv2
 import time
 import numpy as np
+from PySide6.QtGui import QImage
 
+def cvimg2QImage(img):
+    y,x,_=img.shape
+    return QImage(img.data,x,y,QImage.Format_BGR888)
 
-class CV:
-    def __init__(self):
-        pass
+def QImage2cvimg(Qimg:QImage):
+    #format=Qimg.format()
+    Qimg=Qimg.convertToFormat(QImage.Format.Format_BGR888)
+    width=Qimg.width()
+    height=Qimg.height()
+
+    ptr = Qimg.bits()
+    arr = np.frombuffer(ptr, np.uint8,height * width * 3).reshape((height, width,3))
+    return arr
 
 def get_Matrix():
     src_point = np.float32([(187.0, 197.0), (445.0, 205.0), (8.0, 346.0), (613.0, 368.0)])
